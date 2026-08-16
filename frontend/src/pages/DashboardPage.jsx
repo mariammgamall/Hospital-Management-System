@@ -88,44 +88,44 @@ function DashboardPage() {
         </div>
 
         {/* Patient stats */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="bg-card border border-border rounded-2xl shadow-premium p-6 flex items-center justify-between hover:shadow-premium-hover transition-all duration-300">
-            <div className="space-y-2">
-              <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Upcoming Visits</p>
-              <p className="text-3xl font-black">{appointments.filter(a => new Date(a.dateTime) >= new Date()).length}</p>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
+          <div className="bg-card border border-border rounded-2xl shadow-premium p-4 sm:p-6 flex items-center justify-between gap-3 hover:shadow-premium-hover transition-all duration-300">
+            <div className="space-y-1 sm:space-y-2 min-w-0 flex-1">
+              <p className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-muted-foreground truncate" title="Upcoming Visits">Upcoming Visits</p>
+              <p className="text-2xl sm:text-3xl font-black">{appointments.filter(a => new Date(a.dateTime) >= new Date()).length}</p>
             </div>
-            <div className="p-3.5 bg-blue-500/10 text-blue-500 rounded-2xl">
-              <Calendar className="w-6 h-6" />
-            </div>
-          </div>
-
-          <div className="bg-card border border-border rounded-2xl shadow-premium p-6 flex items-center justify-between hover:shadow-premium-hover transition-all duration-300">
-            <div className="space-y-2">
-              <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">EMR Summaries</p>
-              <p className="text-3xl font-black">{medicalRecords.length}</p>
-            </div>
-            <div className="p-3.5 bg-emerald-500/10 text-emerald-500 rounded-2xl">
-              <FileText className="w-6 h-6" />
+            <div className="p-2.5 sm:p-3.5 bg-blue-500/10 text-blue-500 rounded-xl sm:rounded-2xl shrink-0">
+              <Calendar className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
           </div>
 
-          <div className="bg-card border border-border rounded-2xl shadow-premium p-6 flex items-center justify-between hover:shadow-premium-hover transition-all duration-300">
-            <div className="space-y-2">
-              <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Active Prescriptions</p>
-              <p className="text-3xl font-black">{prescriptions.length}</p>
+          <div className="bg-card border border-border rounded-2xl shadow-premium p-4 sm:p-6 flex items-center justify-between gap-3 hover:shadow-premium-hover transition-all duration-300">
+            <div className="space-y-1 sm:space-y-2 min-w-0 flex-1">
+              <p className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-muted-foreground truncate" title="EMR Summaries">EMR Summaries</p>
+              <p className="text-2xl sm:text-3xl font-black">{medicalRecords.length}</p>
             </div>
-            <div className="p-3.5 bg-amber-500/10 text-amber-500 rounded-2xl">
-              <HeartPulse className="w-6 h-6" />
+            <div className="p-2.5 sm:p-3.5 bg-emerald-500/10 text-emerald-500 rounded-xl sm:rounded-2xl shrink-0">
+              <FileText className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
           </div>
 
-          <div className="bg-card border border-border rounded-2xl shadow-premium p-6 flex items-center justify-between hover:shadow-premium-hover transition-all duration-300">
-            <div className="space-y-2">
-              <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Pending Invoices</p>
-              <p className="text-3xl font-black">{pendingInvoicesCount}</p>
+          <div className="bg-card border border-border rounded-2xl shadow-premium p-4 sm:p-6 flex items-center justify-between gap-3 hover:shadow-premium-hover transition-all duration-300">
+            <div className="space-y-1 sm:space-y-2 min-w-0 flex-1">
+              <p className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-muted-foreground truncate" title="Active Prescriptions">Active Prescriptions</p>
+              <p className="text-2xl sm:text-3xl font-black">{prescriptions.length}</p>
             </div>
-            <div className="p-3.5 bg-purple-500/10 text-purple-500 rounded-2xl">
-              <DollarSign className="w-6 h-6" />
+            <div className="p-2.5 sm:p-3.5 bg-amber-500/10 text-amber-500 rounded-xl sm:rounded-2xl shrink-0">
+              <HeartPulse className="w-5 h-5 sm:w-6 sm:h-6" />
+            </div>
+          </div>
+
+          <div className="bg-card border border-border rounded-2xl shadow-premium p-4 sm:p-6 flex items-center justify-between gap-3 hover:shadow-premium-hover transition-all duration-300">
+            <div className="space-y-1 sm:space-y-2 min-w-0 flex-1">
+              <p className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-muted-foreground truncate" title="Pending Invoices">Pending Invoices</p>
+              <p className="text-2xl sm:text-3xl font-black">{pendingInvoicesCount}</p>
+            </div>
+            <div className="p-2.5 sm:p-3.5 bg-purple-500/10 text-purple-500 rounded-xl sm:rounded-2xl shrink-0">
+              <DollarSign className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
           </div>
         </div>
@@ -302,34 +302,34 @@ function DashboardPage() {
         </div>
 
         {/* Doctor stats */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
-          <div className="bg-card border border-border rounded-2xl shadow-premium p-6 flex items-center justify-between hover:shadow-premium-hover transition-all duration-300">
-            <div className="space-y-2">
-              <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Today's Visits</p>
-              <p className="text-3xl font-black">{todayAppointments.length}</p>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-6">
+          <div className="bg-card border border-border rounded-2xl shadow-premium p-4 sm:p-6 flex items-center justify-between gap-3 hover:shadow-premium-hover transition-all duration-300">
+            <div className="space-y-1 sm:space-y-2 min-w-0 flex-1">
+              <p className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-muted-foreground truncate" title="Today's Visits">Today's Visits</p>
+              <p className="text-2xl sm:text-3xl font-black">{todayAppointments.length}</p>
             </div>
-            <div className="p-3.5 bg-blue-500/10 text-blue-500 rounded-2xl">
-              <Calendar className="w-6 h-6" />
-            </div>
-          </div>
-
-          <div className="bg-card border border-border rounded-2xl shadow-premium p-6 flex items-center justify-between hover:shadow-premium-hover transition-all duration-300">
-            <div className="space-y-2">
-              <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Total Clinical Patients</p>
-              <p className="text-3xl font-black">{patientsCount}</p>
-            </div>
-            <div className="p-3.5 bg-emerald-500/10 text-emerald-500 rounded-2xl">
-              <Users className="w-6 h-6" />
+            <div className="p-2.5 sm:p-3.5 bg-blue-500/10 text-blue-500 rounded-xl sm:rounded-2xl shrink-0">
+              <Calendar className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
           </div>
 
-          <div className="bg-card border border-border rounded-2xl shadow-premium p-6 flex items-center justify-between hover:shadow-premium-hover transition-all duration-300">
-            <div className="space-y-2">
-              <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">EMRs Logged</p>
-              <p className="text-3xl font-black">{recentRecords.length}</p>
+          <div className="bg-card border border-border rounded-2xl shadow-premium p-4 sm:p-6 flex items-center justify-between gap-3 hover:shadow-premium-hover transition-all duration-300">
+            <div className="space-y-1 sm:space-y-2 min-w-0 flex-1">
+              <p className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-muted-foreground truncate" title="Total Clinical Patients">Total Clinical Patients</p>
+              <p className="text-2xl sm:text-3xl font-black">{patientsCount}</p>
             </div>
-            <div className="p-3.5 bg-amber-500/10 text-amber-500 rounded-2xl">
-              <FileText className="w-6 h-6" />
+            <div className="p-2.5 sm:p-3.5 bg-emerald-500/10 text-emerald-500 rounded-xl sm:rounded-2xl shrink-0">
+              <Users className="w-5 h-5 sm:w-6 sm:h-6" />
+            </div>
+          </div>
+
+          <div className="bg-card border border-border rounded-2xl shadow-premium p-4 sm:p-6 flex items-center justify-between gap-3 hover:shadow-premium-hover transition-all duration-300">
+            <div className="space-y-1 sm:space-y-2 min-w-0 flex-1">
+              <p className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-muted-foreground truncate" title="EMRs Logged">EMRs Logged</p>
+              <p className="text-2xl sm:text-3xl font-black">{recentRecords.length}</p>
+            </div>
+            <div className="p-2.5 sm:p-3.5 bg-amber-500/10 text-amber-500 rounded-xl sm:rounded-2xl shrink-0">
+              <FileText className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
           </div>
         </div>
@@ -426,34 +426,34 @@ function DashboardPage() {
         </div>
 
         {/* Nurse stats */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
-          <div className="bg-card border border-border rounded-2xl shadow-premium p-6 flex items-center justify-between hover:shadow-premium-hover transition-all duration-300">
-            <div className="space-y-2">
-              <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Available Beds</p>
-              <p className="text-3xl font-black">{availableBeds}</p>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-6">
+          <div className="bg-card border border-border rounded-2xl shadow-premium p-4 sm:p-6 flex items-center justify-between gap-3 hover:shadow-premium-hover transition-all duration-300">
+            <div className="space-y-1 sm:space-y-2 min-w-0 flex-1">
+              <p className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-muted-foreground truncate" title="Available Beds">Available Beds</p>
+              <p className="text-2xl sm:text-3xl font-black">{availableBeds}</p>
             </div>
-            <div className="p-3.5 bg-emerald-500/10 text-emerald-500 rounded-2xl">
-              <Bed className="w-6 h-6" />
-            </div>
-          </div>
-
-          <div className="bg-card border border-border rounded-2xl shadow-premium p-6 flex items-center justify-between hover:shadow-premium-hover transition-all duration-300">
-            <div className="space-y-2">
-              <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Active Inpatients</p>
-              <p className="text-3xl font-black">{activeAdmissions.length}</p>
-            </div>
-            <div className="p-3.5 bg-blue-500/10 text-blue-500 rounded-2xl">
-              <Users className="w-6 h-6" />
+            <div className="p-2.5 sm:p-3.5 bg-emerald-500/10 text-emerald-500 rounded-xl sm:rounded-2xl shrink-0">
+              <Bed className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
           </div>
 
-          <div className="bg-card border border-border rounded-2xl shadow-premium p-6 flex items-center justify-between hover:shadow-premium-hover transition-all duration-300">
-            <div className="space-y-2">
-              <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Operational Wards</p>
-              <p className="text-3xl font-black">{wardStatus.length}</p>
+          <div className="bg-card border border-border rounded-2xl shadow-premium p-4 sm:p-6 flex items-center justify-between gap-3 hover:shadow-premium-hover transition-all duration-300">
+            <div className="space-y-1 sm:space-y-2 min-w-0 flex-1">
+              <p className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-muted-foreground truncate" title="Active Inpatients">Active Inpatients</p>
+              <p className="text-2xl sm:text-3xl font-black">{activeAdmissions.length}</p>
             </div>
-            <div className="p-3.5 bg-purple-500/10 text-purple-500 rounded-2xl">
-              <Building className="w-6 h-6" />
+            <div className="p-2.5 sm:p-3.5 bg-blue-500/10 text-blue-500 rounded-xl sm:rounded-2xl shrink-0">
+              <Users className="w-5 h-5 sm:w-6 sm:h-6" />
+            </div>
+          </div>
+
+          <div className="bg-card border border-border rounded-2xl shadow-premium p-4 sm:p-6 flex items-center justify-between gap-3 hover:shadow-premium-hover transition-all duration-300">
+            <div className="space-y-1 sm:space-y-2 min-w-0 flex-1">
+              <p className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-muted-foreground truncate" title="Operational Wards">Operational Wards</p>
+              <p className="text-2xl sm:text-3xl font-black">{wardStatus.length}</p>
+            </div>
+            <div className="p-2.5 sm:p-3.5 bg-purple-500/10 text-purple-500 rounded-xl sm:rounded-2xl shrink-0">
+              <Building className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
           </div>
         </div>
@@ -564,24 +564,24 @@ function DashboardPage() {
         </div>
 
         {/* Receptionist Stats */}
-        <div className="grid grid-cols-2 gap-6">
-          <div className="bg-card border border-border rounded-2xl shadow-premium p-6 flex items-center justify-between hover:shadow-premium-hover transition-all duration-300">
-            <div className="space-y-2">
-              <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Today's Total Appointments</p>
-              <p className="text-3xl font-black">{todayAppointments.length}</p>
+        <div className="grid grid-cols-2 gap-3 sm:gap-6">
+          <div className="bg-card border border-border rounded-2xl shadow-premium p-4 sm:p-6 flex items-center justify-between gap-3 hover:shadow-premium-hover transition-all duration-300">
+            <div className="space-y-1 sm:space-y-2 min-w-0 flex-1">
+              <p className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-muted-foreground truncate" title="Today's Total Appointments">Today's Total Appointments</p>
+              <p className="text-2xl sm:text-3xl font-black">{todayAppointments.length}</p>
             </div>
-            <div className="p-3.5 bg-blue-500/10 text-blue-500 rounded-2xl">
-              <Calendar className="w-6 h-6" />
+            <div className="p-2.5 sm:p-3.5 bg-blue-500/10 text-blue-500 rounded-xl sm:rounded-2xl shrink-0">
+              <Calendar className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
           </div>
 
-          <div className="bg-card border border-border rounded-2xl shadow-premium p-6 flex items-center justify-between hover:shadow-premium-hover transition-all duration-300">
-            <div className="space-y-2">
-              <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Recently Registered Patients</p>
-              <p className="text-3xl font-black">{recentPatients.length}</p>
+          <div className="bg-card border border-border rounded-2xl shadow-premium p-4 sm:p-6 flex items-center justify-between gap-3 hover:shadow-premium-hover transition-all duration-300">
+            <div className="space-y-1 sm:space-y-2 min-w-0 flex-1">
+              <p className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-muted-foreground truncate" title="Recently Registered Patients">Recently Registered Patients</p>
+              <p className="text-2xl sm:text-3xl font-black">{recentPatients.length}</p>
             </div>
-            <div className="p-3.5 bg-emerald-500/10 text-emerald-500 rounded-2xl">
-              <Users className="w-6 h-6" />
+            <div className="p-2.5 sm:p-3.5 bg-emerald-500/10 text-emerald-500 rounded-xl sm:rounded-2xl shrink-0">
+              <Users className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
           </div>
         </div>
@@ -691,49 +691,49 @@ function DashboardPage() {
       </div>
 
       {/* KPI Cards Grids */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
         
         {/* Total Patients */}
-        <div className="bg-card border border-border rounded-2xl shadow-premium p-6 flex items-center justify-between hover:shadow-premium-hover transition-all duration-300">
-          <div className="space-y-2">
-            <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Total Patients</p>
-            <p className="text-3xl font-black">{kpis.totalPatients}</p>
+        <div className="bg-card border border-border rounded-2xl shadow-premium p-4 sm:p-6 flex items-center justify-between gap-3 hover:shadow-premium-hover transition-all duration-300">
+          <div className="space-y-1 sm:space-y-2 min-w-0 flex-1">
+            <p className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-muted-foreground truncate" title="Total Patients">Total Patients</p>
+            <p className="text-2xl sm:text-3xl font-black">{kpis.totalPatients}</p>
           </div>
-          <div className="p-3.5 bg-blue-500/10 text-blue-500 rounded-2xl">
-            <Users className="w-6 h-6" />
+          <div className="p-2.5 sm:p-3.5 bg-blue-500/10 text-blue-500 rounded-xl sm:rounded-2xl shrink-0">
+            <Users className="w-5 h-5 sm:w-6 sm:h-6" />
           </div>
         </div>
 
         {/* Today's Appointments */}
-        <div className="bg-card border border-border rounded-2xl shadow-premium p-6 flex items-center justify-between hover:shadow-premium-hover transition-all duration-300">
-          <div className="space-y-2">
-            <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Today's Slots</p>
-            <p className="text-3xl font-black">{kpis.todayAppointments}</p>
+        <div className="bg-card border border-border rounded-2xl shadow-premium p-4 sm:p-6 flex items-center justify-between gap-3 hover:shadow-premium-hover transition-all duration-300">
+          <div className="space-y-1 sm:space-y-2 min-w-0 flex-1">
+            <p className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-muted-foreground truncate" title="Today's Slots">Today's Slots</p>
+            <p className="text-2xl sm:text-3xl font-black">{kpis.todayAppointments}</p>
           </div>
-          <div className="p-3.5 bg-amber-500/10 text-amber-500 rounded-2xl">
-            <Calendar className="w-6 h-6" />
+          <div className="p-2.5 sm:p-3.5 bg-amber-500/10 text-amber-500 rounded-xl sm:rounded-2xl shrink-0">
+            <Calendar className="w-5 h-5 sm:w-6 sm:h-6" />
           </div>
         </div>
 
         {/* Available Beds */}
-        <div className="bg-card border border-border rounded-2xl shadow-premium p-6 flex items-center justify-between hover:shadow-premium-hover transition-all duration-300">
-          <div className="space-y-2">
-            <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Available Beds</p>
-            <p className="text-3xl font-black">{kpis.availableBeds}</p>
+        <div className="bg-card border border-border rounded-2xl shadow-premium p-4 sm:p-6 flex items-center justify-between gap-3 hover:shadow-premium-hover transition-all duration-300">
+          <div className="space-y-1 sm:space-y-2 min-w-0 flex-1">
+            <p className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-muted-foreground truncate" title="Available Beds">Available Beds</p>
+            <p className="text-2xl sm:text-3xl font-black">{kpis.availableBeds}</p>
           </div>
-          <div className="p-3.5 bg-emerald-500/10 text-emerald-500 rounded-2xl">
-            <Bed className="w-6 h-6" />
+          <div className="p-2.5 sm:p-3.5 bg-emerald-500/10 text-emerald-500 rounded-xl sm:rounded-2xl shrink-0">
+            <Bed className="w-5 h-5 sm:w-6 sm:h-6" />
           </div>
         </div>
 
         {/* Revenue Today */}
-        <div className="bg-card border border-border rounded-2xl shadow-premium p-6 flex items-center justify-between hover:shadow-premium-hover transition-all duration-300">
-          <div className="space-y-2">
-            <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Revenue Today</p>
-            <p className="text-3xl font-black">{kpis.revenueToday.toFixed(2)} EGP</p>
+        <div className="bg-card border border-border rounded-2xl shadow-premium p-4 sm:p-6 flex items-center justify-between gap-3 hover:shadow-premium-hover transition-all duration-300">
+          <div className="space-y-1 sm:space-y-2 min-w-0 flex-1">
+            <p className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-muted-foreground truncate" title="Revenue Today">Revenue Today</p>
+            <p className="text-2xl sm:text-3xl font-black">{kpis.revenueToday.toFixed(2)} EGP</p>
           </div>
-          <div className="p-3.5 bg-purple-500/10 text-purple-500 rounded-2xl">
-            <DollarSign className="w-6 h-6" />
+          <div className="p-2.5 sm:p-3.5 bg-purple-500/10 text-purple-500 rounded-xl sm:rounded-2xl shrink-0">
+            <DollarSign className="w-5 h-5 sm:w-6 sm:h-6" />
           </div>
         </div>
 

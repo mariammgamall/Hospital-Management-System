@@ -228,37 +228,37 @@ function WardPage() {
       )}
 
       {/* KPI Cards section */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-6">
         
         {/* KPI: Total beds */}
-        <div className="bg-card border border-border rounded-2xl shadow-premium p-6 flex justify-between items-center hover:shadow-premium-hover transition-all duration-300">
-          <div className="space-y-2">
-            <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Total Beds Registered</p>
-            <p className="text-2xl font-black">{stats.totalBeds}</p>
+        <div className="bg-card border border-border rounded-2xl shadow-premium p-4 sm:p-6 flex justify-between items-center gap-3 hover:shadow-premium-hover transition-all duration-300">
+          <div className="space-y-1 sm:space-y-2 min-w-0 flex-1">
+            <p className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-muted-foreground truncate" title="Total Beds Registered">Total Beds Registered</p>
+            <p className="text-2xl sm:text-3xl font-black">{stats.totalBeds}</p>
           </div>
-          <div className="p-3 bg-blue-500/10 text-blue-500 rounded-2xl">
+          <div className="p-2.5 sm:p-3 bg-blue-500/10 text-blue-500 rounded-xl sm:rounded-2xl shrink-0">
             <BedDouble className="w-5 h-5" />
           </div>
         </div>
 
         {/* KPI: Available beds */}
-        <div className="bg-card border border-border rounded-2xl shadow-premium p-6 flex justify-between items-center hover:shadow-premium-hover transition-all duration-300">
-          <div className="space-y-2">
-            <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Vacant Beds</p>
-            <p className="text-2xl font-black text-emerald-500">{stats.availableBeds}</p>
+        <div className="bg-card border border-border rounded-2xl shadow-premium p-4 sm:p-6 flex justify-between items-center gap-3 hover:shadow-premium-hover transition-all duration-300">
+          <div className="space-y-1 sm:space-y-2 min-w-0 flex-1">
+            <p className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-muted-foreground truncate" title="Vacant Beds">Vacant Beds</p>
+            <p className="text-2xl sm:text-3xl font-black text-emerald-500">{stats.availableBeds}</p>
           </div>
-          <div className="p-3 bg-emerald-500/10 text-emerald-500 rounded-2xl">
+          <div className="p-2.5 sm:p-3 bg-emerald-500/10 text-emerald-500 rounded-xl sm:rounded-2xl shrink-0">
             <UserCheck className="w-5 h-5" />
           </div>
         </div>
 
         {/* KPI: Occupied beds */}
-        <div className="bg-card border border-border rounded-2xl shadow-premium p-6 flex justify-between items-center hover:shadow-premium-hover transition-all duration-300">
-          <div className="space-y-2">
-            <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Admitted Inpatients</p>
-            <p className="text-2xl font-black text-amber-500">{stats.occupiedBeds}</p>
+        <div className="bg-card border border-border rounded-2xl shadow-premium p-4 sm:p-6 flex justify-between items-center gap-3 hover:shadow-premium-hover transition-all duration-300">
+          <div className="space-y-1 sm:space-y-2 min-w-0 flex-1">
+            <p className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-muted-foreground truncate" title="Admitted Inpatients">Admitted Inpatients</p>
+            <p className="text-2xl sm:text-3xl font-black text-amber-500">{stats.occupiedBeds}</p>
           </div>
-          <div className="p-3 bg-amber-500/10 text-amber-500 rounded-2xl">
+          <div className="p-2.5 sm:p-3 bg-amber-500/10 text-amber-500 rounded-xl sm:rounded-2xl shrink-0">
             <Activity className="w-5 h-5" />
           </div>
         </div>
