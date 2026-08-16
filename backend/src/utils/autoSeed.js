@@ -3,7 +3,7 @@ const prisma = require('./prisma');
 
 async function autoSeedDefaultUsers() {
   try {
-    console.log('Zero users detected in database. Executing automatic initialization seed...');
+    console.log('Checking database seed state...');
 
     const salt = bcrypt.genSaltSync(10);
     const commonPasswordHash = bcrypt.hashSync('password123', salt);
@@ -42,16 +42,16 @@ async function autoSeedDefaultUsers() {
     });
 
     // 3. Doctors
-    const doc1 = await prisma.user.upsert({
+    const doc1User = await prisma.user.upsert({
       where: { email: 'doctor.ahmed@caresync.com' },
       update: { password: commonPasswordHash },
       create: { email: 'doctor.ahmed@caresync.com', password: commonPasswordHash, role: 'DOCTOR' }
     });
-    await prisma.doctor.upsert({
-      where: { userId: doc1.id },
+    const doc1 = await prisma.doctor.upsert({
+      where: { userId: doc1User.id },
       update: {},
       create: {
-        userId: doc1.id,
+        userId: doc1User.id,
         specialty: 'Cardiology',
         departmentId: cardiology.id,
         contactInfo: 'Dr. Ahmed Mostafa, Tel: 01012345678',
@@ -59,16 +59,16 @@ async function autoSeedDefaultUsers() {
       }
     });
 
-    const doc2 = await prisma.user.upsert({
+    const doc2User = await prisma.user.upsert({
       where: { email: 'doctor.mona@caresync.com' },
       update: { password: commonPasswordHash },
       create: { email: 'doctor.mona@caresync.com', password: commonPasswordHash, role: 'DOCTOR' }
     });
     await prisma.doctor.upsert({
-      where: { userId: doc2.id },
+      where: { userId: doc2User.id },
       update: {},
       create: {
-        userId: doc2.id,
+        userId: doc2User.id,
         specialty: 'Pediatrics',
         departmentId: pediatrics.id,
         contactInfo: 'Dr. Mona Hassan, Tel: 01187654321',
@@ -76,16 +76,16 @@ async function autoSeedDefaultUsers() {
       }
     });
 
-    const doc3 = await prisma.user.upsert({
+    const doc3User = await prisma.user.upsert({
       where: { email: 'doctor.khaled@caresync.com' },
       update: { password: commonPasswordHash },
       create: { email: 'doctor.khaled@caresync.com', password: commonPasswordHash, role: 'DOCTOR' }
     });
     await prisma.doctor.upsert({
-      where: { userId: doc3.id },
+      where: { userId: doc3User.id },
       update: {},
       create: {
-        userId: doc3.id,
+        userId: doc3User.id,
         specialty: 'Family Medicine',
         departmentId: generalPractice.id,
         contactInfo: 'Dr. Khaled Ibrahim, Tel: 01223456789',
@@ -155,7 +155,7 @@ async function autoSeedDefaultUsers() {
       update: { password: commonPasswordHash },
       create: { email: 'mariam@caresync.com', password: commonPasswordHash, role: 'PATIENT' }
     });
-    await prisma.patient.upsert({
+    const patient1 = await prisma.patient.upsert({
       where: { userId: pat1User.id },
       update: {},
       create: {
@@ -192,7 +192,65 @@ async function autoSeedDefaultUsers() {
       }
     });
 
-    // 6. Pharmacy Inventory & Lab Tests
+    // 6. Appointments for Mariam Gamal
+    const apptCount = await prisma.appointment.count();
+    if (apptCount === 0) {
+      const appt1 = await prisma.appointment.create({
+        data: {
+          patientId: patient1.id,
+          doctorId: doc1.id,
+          dateTime: new Date(Date.now() + 86400000 * 2), // 2 days from now
+          reason: 'Routine Cardiology Follow-up & ECG Consultation',
+          status: 'SCHEDULED'
+        }
+      });
+
+      // 7. Clinical EMR Medical Record for Mariam Gamal
+      const medRecord = await prisma.medicalRecord.create({
+        data: {
+          patientId: patient1.id,
+          doctorId: doc1.id,
+          appointmentId: appt1.id,
+          diagnosis: 'Mild Essential Hypertension & Seasonal Asthma',
+          symptoms: 'Occasional mild shortness of breath during exertion.',
+          notes: 'Patient advised to continue low-sodium diet and monitor blood pressure weekly.'
+        }
+      });
+
+      // 8. Prescription for Mariam Gamal
+      await prisma.prescription.create({
+        data: {
+          medicalRecordId: medRecord.id,
+          patientId: patient1.id,
+          doctorId: doc1.id,
+          medicines: {
+            create: [
+              { name: 'Amoxicillin 500mg', dosage: '500mg', frequency: 'Twice daily after meals', duration: '7 days' },
+              { name: 'Salbutamol Inhaler', dosage: '100mcg', frequency: 'As needed for wheezing', duration: '30 days' }
+            ]
+          }
+        }
+      });
+
+      // 9. Invoice for Mariam Gamal
+      await prisma.invoice.create({
+        data: {
+          patientId: patient1.id,
+          appointmentId: appt1.id,
+          status: 'PENDING',
+          totalAmount: 450.00,
+          paidAmount: 0.00,
+          items: {
+            create: [
+              { description: 'Cardiology Specialist Consultation Fee', amount: 300.00 },
+              { description: 'ECG Screening & Report Generation', amount: 150.00 }
+            ]
+          }
+        }
+      });
+    }
+
+    // 10. Pharmacy Inventory & Lab Tests
     const medCount = await prisma.medicineInventory.count();
     if (medCount === 0) {
       await prisma.medicineInventory.createMany({
