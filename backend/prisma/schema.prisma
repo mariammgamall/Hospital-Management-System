@@ -1,0 +1,280 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  DOCTOR
+  NURSE
+  RECEPTIONIST
+  PHARMACIST
+  LAB_TECHNICIAN
+  BILLING
+  PATIENT
+}
+
+enum AppointmentStatus {
+  SCHEDULED
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  PARTIALLY_PAID
+}
+
+enum AdmissionStatus {
+  ACTIVE
+  DISCHARGED
+}
+
+model User {
+  id           String        @id @default(uuid())
+  email        String        @unique
+  password     String
+  role         Role          @default(PATIENT)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  
+  // Relations to specific profiles
+  patientProfile Patient?
+  doctorProfile  Doctor?
+  staffProfile   Staff?
+  
+  notifications  Notification[]
+}
+
+model Department {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  doctors     Doctor[]
+  staff       Staff[]
+}
+
+model Doctor {
+  id           String     @id @default(uuid())
+  userId       String     @unique
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  specialty    String
+  schedule     Json       // E.g. {"monday": ["09:00-12:00", "14:00-17:00"], ...}
+  contactInfo  String?
+  departmentId String
+  department   Department @relation(fields: [departmentId], references: [id])
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  appointments    Appointment[]
+  medicalRecords  MedicalRecord[]
+  prescriptions   Prescription[]
+}
+
+model Patient {
+  id             String    @id @default(uuid())
+  userId         String?   @unique
+  user           User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+  firstName      String
+  lastName       String
+  gender         String
+  dateOfBirth    DateTime
+  bloodType      String?
+  phoneNumber    String?
+  address        String?
+  medicalHistory String?   // General clinical history text
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  appointments    Appointment[]
+  medicalRecords  MedicalRecord[]
+  prescriptions   Prescription[]
+  admissions      Admission[]
+  invoices        Invoice[]
+}
+
+model Staff {
+  id           String      @id @default(uuid())
+  userId       String      @unique
+  user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  firstName    String
+  lastName     String
+  departmentId String?
+  department   Department? @relation(fields: [departmentId], references: [id], onDelete: SetNull)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+}
+
+model Appointment {
+  id          String            @id @default(uuid())
+  patientId   String
+  patient     Patient           @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  doctorId    String
+  doctor      Doctor            @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+  dateTime    DateTime
+  reason      String
+  status      AppointmentStatus @default(SCHEDULED)
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  medicalRecord MedicalRecord?
+  invoice       Invoice?
+}
+
+model MedicalRecord {
+  id            String       @id @default(uuid())
+  patientId     String
+  patient       Patient      @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  doctorId      String
+  doctor        Doctor       @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+  appointmentId String?      @unique
+  appointment   Appointment? @relation(fields: [appointmentId], references: [id], onDelete: SetNull)
+  diagnosis     String
+  symptoms      String
+  notes         String?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  prescriptions Prescription[]
+}
+
+model Prescription {
+  id              String         @id @default(uuid())
+  medicalRecordId String?
+  medicalRecord   MedicalRecord? @relation(fields: [medicalRecordId], references: [id], onDelete: Cascade)
+  patientId       String
+  patient         Patient        @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  doctorId        String
+  doctor          Doctor         @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  medicines       Medicine[]
+}
+
+model Medicine {
+  id             String       @id @default(uuid())
+  prescriptionId String
+  prescription   Prescription @relation(fields: [prescriptionId], references: [id], onDelete: Cascade)
+  name           String
+  dosage         String       // E.g. "500mg"
+  frequency      String       // E.g. "Twice daily"
+  duration       String       // E.g. "7 days"
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+}
+
+model Invoice {
+  id            String        @id @default(uuid())
+  patientId     String
+  patient       Patient       @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  appointmentId String?       @unique
+  appointment   Appointment?  @relation(fields: [appointmentId], references: [id], onDelete: SetNull)
+  status        PaymentStatus @default(PENDING)
+  totalAmount   Float
+  paidAmount    Float         @default(0.0)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  items         InvoiceItem[]
+}
+
+model InvoiceItem {
+  id          String   @id @default(uuid())
+  invoiceId   String
+  invoice     Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  description String
+  amount      Float
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Ward {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  floor     Int
+  type      String   // E.g. "ICU", "General", "Pediatric"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  beds      Bed[]
+}
+
+model Bed {
+  id          String   @id @default(uuid())
+  wardId      String
+  ward        Ward     @relation(fields: [wardId], references: [id], onDelete: Cascade)
+  number      String   // E.g. "Bed-A1"
+  isAvailable Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  admissions  Admission[]
+}
+
+model Admission {
+  id            String          @id @default(uuid())
+  patientId     String
+  patient       Patient         @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  bedId         String
+  bed           Bed             @relation(fields: [bedId], references: [id], onDelete: Cascade)
+  admissionDate DateTime        @default(now())
+  dischargeDate DateTime?
+  reason        String
+  status        AdmissionStatus @default(ACTIVE)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model LabTest {
+  id             String   @id @default(uuid())
+  patientId      String
+  patientName    String
+  doctorId       String?
+  doctorName     String?
+  testName       String
+  category       String   // E.g., "Hematology", "Biochemistry", "Microbiology", "Radiology"
+  status         String   @default("PENDING") // PENDING, COMPLETED, CANCELLED
+  result         String?  // Test findings/numerical value
+  referenceRange String?  // E.g., "70-99 mg/dL"
+  unit           String?  // E.g., "mg/dL", "g/dL"
+  notes          String?
+  technicianName String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model MedicineInventory {
+  id            String   @id @default(uuid())
+  name          String   @unique
+  code          String   @unique
+  category      String   // E.g., "Antibiotic", "Analgesic", "Antihypertensive"
+  stockQuantity Int      @default(0)
+  unitPrice     Float    @default(0.0)
+  minThreshold  Int      @default(10)
+  supplier      String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
