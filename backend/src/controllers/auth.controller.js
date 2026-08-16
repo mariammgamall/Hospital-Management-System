@@ -105,9 +105,13 @@ const login = async (req, res, next) => {
     const formattedEmail = (email || '').trim().toLowerCase();
 
     // Auto Seed check for fresh/empty cloud database
-    const totalUsers = await prisma.user.count();
-    if (totalUsers === 0) {
-      await autoSeedDefaultUsers();
+    try {
+      const totalUsers = await prisma.user.count();
+      if (totalUsers === 0) {
+        await autoSeedDefaultUsers();
+      }
+    } catch (dbErr) {
+      console.log('Database count check notice (auto-seeding if tables created):', dbErr.message);
     }
 
     // Check user email (case-insensitive)
