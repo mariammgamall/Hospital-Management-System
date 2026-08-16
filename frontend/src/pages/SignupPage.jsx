@@ -270,8 +270,8 @@ function SignupPage() {
         )}
 
         {/* Gender & DOB Grid */}
-        <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-1.5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="space-y-1.5 min-w-0">
             <label htmlFor="gender" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
               Gender *
             </label>
@@ -290,12 +290,12 @@ function SignupPage() {
             </select>
           </div>
 
-          <div className="space-y-1.5">
+          <div className="space-y-1.5 min-w-0">
             <label htmlFor="dateOfBirth" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
               Date of Birth *
             </label>
-            <div className="relative">
-              <Calendar className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-muted-foreground" />
+            <div className="relative min-w-0 w-full overflow-hidden">
+              <Calendar className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-muted-foreground shrink-0 z-10 pointer-events-none" />
               <input
                 id="dateOfBirth"
                 name="dateOfBirth"
@@ -304,7 +304,7 @@ function SignupPage() {
                 value={formData.dateOfBirth}
                 onChange={handleChange}
                 disabled={isLoading}
-                className="w-full pl-11 pr-4 py-2.5 rounded-xl border border-input bg-muted/25 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all disabled:opacity-50"
+                className="w-full pl-11 pr-3 py-2.5 rounded-xl border border-input bg-muted/25 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all disabled:opacity-50 appearance-none min-w-0 max-w-full"
               />
             </div>
           </div>
