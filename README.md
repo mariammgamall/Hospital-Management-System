@@ -2,6 +2,9 @@
 
 A complete, production-ready, feature-rich enterprise Hospital Management System built from the ground up using a modern JavaScript/Node stack. The system features a responsive, beautifully styled React frontend, a resilient Express.js REST API backend, and a PostgreSQL database orchestrated by Prisma ORM.
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Vercel-brightgreen?style=for-the-badge&logo=vercel)](https://mariam-hms-portal.vercel.app/)
+👉 **Live Application URL**: [https://mariam-hms-portal.vercel.app/](https://mariam-hms-portal.vercel.app/)
+
 ![CareSync Hospital Management System Dashboard](screenshots/HMS.png)
 
 ---
