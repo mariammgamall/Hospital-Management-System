@@ -1,9 +1,5 @@
 {
   "name": "hospital-management-system",
   "version": "1.0.0",
-  "private": true,
-  "scripts": {
-    "vercel-build": "cd frontend && npm install && npm run build",
-    "build": "cd frontend && npm install && npm run build"
-  }
+  "private": true
 }
