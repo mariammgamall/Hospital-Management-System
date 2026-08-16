@@ -27,7 +27,7 @@ function LoginPage() {
     }
 
     try {
-      await login(email, password);
+      await login(email.trim(), password);
       navigate('/dashboard');
     } catch (err) {
       // Handled in store

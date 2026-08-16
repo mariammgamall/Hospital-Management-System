@@ -206,13 +206,16 @@ function DoctorPage() {
               />
             </form>
 
-            <div className="flex gap-3 w-full md:w-auto">
-              <div className="flex items-center space-x-2 bg-muted/20 border border-border px-3 py-1.5 rounded-xl text-xs w-full justify-between">
-                <Briefcase className="w-3.5 h-3.5 text-muted-foreground" />
+            <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+              <div className="flex items-center space-x-2 bg-muted/20 border border-border px-3 py-2 rounded-xl text-xs w-full sm:w-auto justify-between">
+                <div className="flex items-center space-x-2">
+                  <Briefcase className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+                  <span className="font-semibold text-muted-foreground text-xs sm:hidden">Department:</span>
+                </div>
                 <select 
                   value={departmentId} 
                   onChange={(e) => setDepartmentId(e.target.value)}
-                  className="bg-transparent focus:outline-none font-bold"
+                  className="bg-transparent focus:outline-none font-bold text-xs cursor-pointer"
                 >
                   <option value="">All Departments</option>
                   {departments.map((dept) => (
@@ -221,14 +224,14 @@ function DoctorPage() {
                 </select>
               </div>
 
-              <div className="flex items-center space-x-2 bg-muted/20 border border-border px-3 py-1.5 rounded-xl text-xs w-full justify-between">
-                <Award className="w-3.5 h-3.5 text-muted-foreground" />
+              <div className="flex items-center space-x-2 bg-muted/20 border border-border px-3 py-2 rounded-xl text-xs w-full sm:w-auto justify-between">
+                <Award className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
                 <input
                   type="text"
                   placeholder="Specialty filter..."
                   value={specialty}
                   onChange={(e) => setSpecialty(e.target.value)}
-                  className="bg-transparent focus:outline-none font-bold placeholder-muted-foreground w-20"
+                  className="bg-transparent focus:outline-none font-bold text-xs placeholder-muted-foreground w-full"
                 />
               </div>
             </div>

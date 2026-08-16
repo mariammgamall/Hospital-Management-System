@@ -94,16 +94,30 @@ const registerPatient = async (req, res, next) => {
   }
 };
 
+const { autoSeedDefaultUsers } = require('../utils/autoSeed');
+
 /**
  * Logs in users of all roles
  */
 const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
+    const formattedEmail = (email || '').trim().toLowerCase();
 
-    // Check user email
-    const user = await prisma.user.findUnique({
-      where: { email },
+    // Auto Seed check for fresh/empty cloud database
+    const totalUsers = await prisma.user.count();
+    if (totalUsers === 0) {
+      await autoSeedDefaultUsers();
+    }
+
+    // Check user email (case-insensitive)
+    const user = await prisma.user.findFirst({
+      where: {
+        email: {
+          equals: formattedEmail,
+          mode: 'insensitive'
+        }
+      },
       include: {
         patientProfile: true,
         doctorProfile: true,
