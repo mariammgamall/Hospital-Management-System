@@ -257,7 +257,7 @@ function AppointmentPage() {
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="pl-3 pr-8 py-2 w-full text-xs bg-muted/40 border border-border rounded-xl focus:outline-none focus:ring-1 focus:ring-primary appearance-none cursor-pointer"
+                className="pl-3 pr-8 py-2 w-full text-xs bg-muted/40 border border-border rounded-xl focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer"
               >
                 <option value="">All Statuses</option>
                 <option value="SCHEDULED">Scheduled</option>
@@ -265,7 +265,6 @@ function AppointmentPage() {
                 <option value="COMPLETED">Completed</option>
                 <option value="CANCELLED">Cancelled</option>
               </select>
-              <Filter className="absolute right-3 top-1/2 transform -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground pointer-events-none" />
             </div>
 
             {/* Doctor selector (for staff view) */}
@@ -274,7 +273,7 @@ function AppointmentPage() {
                 <select
                   value={doctorFilter}
                   onChange={(e) => setDoctorFilter(e.target.value)}
-                  className="pl-3 pr-8 py-2 w-full text-xs bg-muted/40 border border-border rounded-xl focus:outline-none focus:ring-1 focus:ring-primary appearance-none cursor-pointer"
+                  className="pl-3 pr-8 py-2 w-full text-xs bg-muted/40 border border-border rounded-xl focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer"
                 >
                   <option value="">All Specialists</option>
                   {doctors.map((doc) => (
@@ -283,7 +282,6 @@ function AppointmentPage() {
                     </option>
                   ))}
                 </select>
-                <User className="absolute right-3 top-1/2 transform -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground pointer-events-none" />
               </div>
             )}
 

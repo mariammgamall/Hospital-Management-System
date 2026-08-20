@@ -176,7 +176,7 @@ async function autoSeedDefaultUsers() {
       update: { password: commonPasswordHash },
       create: { email: 'shehab@caresync.com', password: commonPasswordHash, role: 'PATIENT' }
     });
-    await prisma.patient.upsert({
+    const patient2 = await prisma.patient.upsert({
       where: { userId: pat2User.id },
       update: {},
       create: {
@@ -188,76 +188,149 @@ async function autoSeedDefaultUsers() {
         bloodType: 'A+',
         phoneNumber: '01198765432',
         address: '22 Tahrir Square, Downtown, Cairo',
-        medicalHistory: 'Routine checkups only.'
+        medicalHistory: 'Diagnosed with Diabetes type 2. Managed with oral hypoglycemics and diet control.'
       }
     });
 
-    // 6. Appointments for Mariam Gamal
+    // 6. Appointments & Clinical Records for Mariam & Shehab
     const apptCount = await prisma.appointment.count();
     if (apptCount === 0) {
+      // Mariam Gamal Past & Future Appointments
       const appt1 = await prisma.appointment.create({
         data: {
           patientId: patient1.id,
           doctorId: doc1.id,
-          dateTime: new Date(Date.now() + 86400000 * 2), // 2 days from now
-          reason: 'Routine Cardiology Follow-up & ECG Consultation',
-          status: 'SCHEDULED'
+          dateTime: new Date(Date.now() - 86400000 * 5), // 5 days ago
+          reason: 'Routine post-op checkup and ECG reading',
+          status: 'COMPLETED'
         }
       });
 
-      // 7. Clinical EMR Medical Record for Mariam Gamal
-      const medRecord = await prisma.medicalRecord.create({
+      await prisma.appointment.create({
+        data: {
+          patientId: patient1.id,
+          doctorId: doc1.id,
+          dateTime: new Date(Date.now() + 86400000 * 2), // 2 days in future
+          reason: 'Follow-up consultation for cardiac review',
+          status: 'CONFIRMED'
+        }
+      });
+
+      // Shehab Eldin Ebied Completed Appointment
+      const apptShehab = await prisma.appointment.create({
+        data: {
+          patientId: patient2.id,
+          doctorId: doc2.id,
+          dateTime: new Date(Date.now() - 86400000 * 3), // 3 days ago
+          reason: 'Consultation with Dr. Mona Hassan regarding pediatric asthma & allergy control',
+          status: 'COMPLETED'
+        }
+      });
+
+      // 7. Clinical EMR Records & Prescriptions for Mariam Gamal
+      const recordMariam = await prisma.medicalRecord.create({
         data: {
           patientId: patient1.id,
           doctorId: doc1.id,
           appointmentId: appt1.id,
-          diagnosis: 'Mild Essential Hypertension & Seasonal Asthma',
-          symptoms: 'Occasional mild shortness of breath during exertion.',
-          notes: 'Patient advised to continue low-sodium diet and monitor blood pressure weekly.'
+          symptoms: 'Patient reports mild shortness of breath when climbing stairs, but otherwise feels good.',
+          diagnosis: 'Stable post-operative cardiac condition with mild exercise intolerance.',
+          notes: 'Suture sites are healing perfectly. ECG shows regular sinus rhythm without ST elevations.'
         }
       });
 
-      // 8. Prescription for Mariam Gamal
-      await prisma.prescription.create({
+      const rxMariam = await prisma.prescription.create({
         data: {
-          medicalRecordId: medRecord.id,
+          medicalRecordId: recordMariam.id,
           patientId: patient1.id,
-          doctorId: doc1.id,
-          medicines: {
-            create: [
-              { name: 'Amoxicillin 500mg', dosage: '500mg', frequency: 'Twice daily after meals', duration: '7 days' },
-              { name: 'Salbutamol Inhaler', dosage: '100mcg', frequency: 'As needed for wheezing', duration: '30 days' }
-            ]
-          }
+          doctorId: doc1.id
         }
       });
 
-      // 9. Invoice for Mariam Gamal
-      await prisma.invoice.create({
+      await prisma.medicine.createMany({
+        data: [
+          { prescriptionId: rxMariam.id, name: 'Atorvastatin 40mg', dosage: '40mg', frequency: 'Once daily at bedtime', duration: '30 days' },
+          { prescriptionId: rxMariam.id, name: 'Aspirin 81mg', dosage: '81mg', frequency: 'Once daily in morning', duration: '90 days' }
+        ]
+      });
+
+      // 8. Clinical EMR Records & Prescriptions for Shehab Eldin Ebied
+      const recordShehab = await prisma.medicalRecord.create({
+        data: {
+          patientId: patient2.id,
+          doctorId: doc2.id,
+          appointmentId: apptShehab.id,
+          symptoms: 'Parent reports mild skin rash and itching on forearms.',
+          diagnosis: 'Mild pediatric contact dermatitis & seasonal allergy.',
+          notes: 'Advised switching to hypoallergenic soap. Apply cream as directed.'
+        }
+      });
+
+      const rxShehab = await prisma.prescription.create({
+        data: {
+          medicalRecordId: recordShehab.id,
+          patientId: patient2.id,
+          doctorId: doc2.id
+        }
+      });
+
+      await prisma.medicine.create({
+        data: {
+          prescriptionId: rxShehab.id,
+          name: 'Hydrocortisone 1% Cream',
+          dosage: 'Apply a thin layer',
+          frequency: 'Twice daily',
+          duration: '7 days'
+        }
+      });
+
+      // 9. Invoices for Mariam Gamal
+      const invMariam = await prisma.invoice.create({
         data: {
           patientId: patient1.id,
           appointmentId: appt1.id,
-          status: 'PENDING',
-          totalAmount: 450.00,
-          paidAmount: 0.00,
-          items: {
-            create: [
-              { description: 'Cardiology Specialist Consultation Fee', amount: 300.00 },
-              { description: 'ECG Screening & Report Generation', amount: 150.00 }
-            ]
-          }
+          status: 'PAID',
+          totalAmount: 700.00,
+          paidAmount: 700.00
         }
+      });
+
+      await prisma.invoiceItem.createMany({
+        data: [
+          { invoiceId: invMariam.id, description: 'Specialist Cardiology Consultation', amount: 450.00 },
+          { invoiceId: invMariam.id, description: 'ECG Electrocardiogram Diagnostics', amount: 250.00 }
+        ]
+      });
+
+      // 10. Invoices for Shehab Eldin Ebied
+      const invShehab = await prisma.invoice.create({
+        data: {
+          patientId: patient2.id,
+          appointmentId: apptShehab.id,
+          status: 'PARTIALLY_PAID',
+          totalAmount: 500.00,
+          paidAmount: 200.00
+        }
+      });
+
+      await prisma.invoiceItem.createMany({
+        data: [
+          { invoiceId: invShehab.id, description: 'Pediatric & Allergy Consultation', amount: 350.00 },
+          { invoiceId: invShehab.id, description: 'Clinical Allergy Screening Test', amount: 150.00 }
+        ]
       });
     }
 
-    // 10. Pharmacy Inventory & Lab Tests
+    // 11. Pharmacy Inventory & Lab Tests
     const medCount = await prisma.medicineInventory.count();
     if (medCount === 0) {
       await prisma.medicineInventory.createMany({
         data: [
-          { name: 'Amoxicillin 500mg', code: 'MED-101', category: 'Antibiotics', stockQuantity: 150, unitPrice: 25.50, supplier: 'EIPICO' },
-          { name: 'Paracetamol 500mg', code: 'MED-102', category: 'Analgesic', stockQuantity: 12, unitPrice: 10.00, supplier: 'Pharco' },
-          { name: 'Ibuprofen 400mg', code: 'MED-103', category: 'NSAID', stockQuantity: 80, unitPrice: 18.00, supplier: 'Amoun' }
+          { name: 'Atorvastatin 40mg', code: 'MED-001', category: 'Cardiovascular', stockQuantity: 450, unitPrice: 85.0, minThreshold: 50, supplier: 'PharmaCorp Egypt' },
+          { name: 'Aspirin 81mg', code: 'MED-002', category: 'Cardiovascular', stockQuantity: 1200, unitPrice: 15.0, minThreshold: 100, supplier: 'PharmaCorp Egypt' },
+          { name: 'Amoxicillin 500mg', code: 'MED-003', category: 'Antibiotics', stockQuantity: 320, unitPrice: 42.5, minThreshold: 40, supplier: 'EIPICO Pharmaceuticals' },
+          { name: 'Hydrocortisone 1% Cream', code: 'MED-004', category: 'Dermatology', stockQuantity: 85, unitPrice: 28.0, minThreshold: 15, supplier: 'Sedico Pharma' },
+          { name: 'Paracetamol 500mg', code: 'MED-005', category: 'Analgesic', stockQuantity: 2500, unitPrice: 10.0, minThreshold: 200, supplier: 'EVA Pharma' }
         ]
       });
     }
@@ -266,7 +339,33 @@ async function autoSeedDefaultUsers() {
     if (labCount === 0) {
       await prisma.labTest.createMany({
         data: [
-          { patientName: 'Mariam Gamal', doctorName: 'Dr. Ahmed Mostafa', technicianName: 'Sherif Hossam', testName: 'Complete Blood Count (CBC)', category: 'Hematology', status: 'COMPLETED', result: 'Hb: 13.5 g/dL, WBC: 6.5 x10^3/uL', referenceRange: '12.0 - 15.5 g/dL', unit: 'g/dL', notes: 'Normal limits.' }
+          {
+            patientId: patient1.id,
+            patientName: 'Mariam Gamal',
+            doctorId: doc1.id,
+            doctorName: 'Dr. Ahmed Mostafa',
+            testName: 'Complete Blood Count (CBC)',
+            category: 'Hematology',
+            status: 'COMPLETED',
+            result: 'WBC: 6.5 x10^3/uL, RBC: 4.8 x10^6/uL, Hb: 13.5 g/dL',
+            referenceRange: 'Hb: 12.0 - 15.5 g/dL',
+            unit: 'g/dL',
+            notes: 'Normal physiological limits.',
+            technicianName: 'Sherif Hossam'
+          },
+          {
+            patientId: patient2.id,
+            patientName: 'Shehab Eldin Ebied',
+            doctorId: doc2.id,
+            doctorName: 'Dr. Mona Hassan',
+            testName: 'Fasting Blood Sugar (FBS)',
+            category: 'Biochemistry',
+            status: 'PENDING',
+            referenceRange: '70 - 99 mg/dL',
+            unit: 'mg/dL',
+            notes: 'Patient requested to fast for 8 hours prior to morning blood draw.',
+            technicianName: 'Sherif Hossam'
+          }
         ]
       });
     }
