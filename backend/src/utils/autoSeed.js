@@ -192,15 +192,14 @@ async function autoSeedDefaultUsers() {
       }
     });
 
-    // 6. Appointments & Clinical Records for Mariam & Shehab
-    const apptCount = await prisma.appointment.count();
-    if (apptCount === 0) {
-      // Mariam Gamal Past & Future Appointments
+    // 6. Appointments & Clinical Records for Mariam Gamal
+    const mariamAppts = await prisma.appointment.findMany({ where: { patientId: patient1.id } });
+    if (mariamAppts.length === 0) {
       const appt1 = await prisma.appointment.create({
         data: {
           patientId: patient1.id,
           doctorId: doc1.id,
-          dateTime: new Date(Date.now() - 86400000 * 5), // 5 days ago
+          dateTime: new Date(Date.now() - 86400000 * 3), // 3 days ago
           reason: 'Routine post-op checkup and ECG reading',
           status: 'COMPLETED'
         }
@@ -216,18 +215,6 @@ async function autoSeedDefaultUsers() {
         }
       });
 
-      // Shehab Eldin Ebied Completed Appointment
-      const apptShehab = await prisma.appointment.create({
-        data: {
-          patientId: patient2.id,
-          doctorId: doc2.id,
-          dateTime: new Date(Date.now() - 86400000 * 3), // 3 days ago
-          reason: 'Consultation with Dr. Mona Hassan regarding pediatric asthma & allergy control',
-          status: 'COMPLETED'
-        }
-      });
-
-      // 7. Clinical EMR Records & Prescriptions for Mariam Gamal
       const recordMariam = await prisma.medicalRecord.create({
         data: {
           patientId: patient1.id,
@@ -254,12 +241,68 @@ async function autoSeedDefaultUsers() {
         ]
       });
 
-      // 8. Clinical EMR Records & Prescriptions for Shehab Eldin Ebied
+      const invMariam = await prisma.invoice.create({
+        data: {
+          patientId: patient1.id,
+          appointmentId: appt1.id,
+          status: 'PAID',
+          totalAmount: 700.00,
+          paidAmount: 700.00
+        }
+      });
+
+      await prisma.invoiceItem.createMany({
+        data: [
+          { invoiceId: invMariam.id, description: 'Specialist Cardiology Consultation', amount: 450.00 },
+          { invoiceId: invMariam.id, description: 'ECG Electrocardiogram Diagnostics', amount: 250.00 }
+        ]
+      });
+
+      const invMariam2 = await prisma.invoice.create({
+        data: {
+          patientId: patient1.id,
+          status: 'PENDING',
+          totalAmount: 35500.00,
+          paidAmount: 0.00
+        }
+      });
+
+      await prisma.invoiceItem.createMany({
+        data: [
+          { invoiceId: invMariam2.id, description: 'Inpatient Ward Room Rent - ICU Bed (3 Days)', amount: 9000.00 },
+          { invoiceId: invMariam2.id, description: 'Cardiovascular Surgery Fees (Co-Pay)', amount: 25000.00 }
+        ]
+      });
+    }
+
+    // 7. Appointments & Clinical Records for Shehab Eldin Ebied
+    const shehabAppts = await prisma.appointment.findMany({ where: { patientId: patient2.id } });
+    if (shehabAppts.length === 0) {
+      const apptShehab1 = await prisma.appointment.create({
+        data: {
+          patientId: patient2.id,
+          doctorId: doc2.id,
+          dateTime: new Date(Date.now() - 86400000 * 2), // 2 days ago
+          reason: 'Consultation with Dr. Mona Hassan regarding pediatric asthma & allergy control',
+          status: 'COMPLETED'
+        }
+      });
+
+      const apptShehab2 = await prisma.appointment.create({
+        data: {
+          patientId: patient2.id,
+          doctorId: doc3.id,
+          dateTime: new Date(Date.now() + 86400000 * 3), // 3 days in future
+          reason: 'General Practice Wellness & Diabetes Checkup',
+          status: 'SCHEDULED'
+        }
+      });
+
       const recordShehab = await prisma.medicalRecord.create({
         data: {
           patientId: patient2.id,
           doctorId: doc2.id,
-          appointmentId: apptShehab.id,
+          appointmentId: apptShehab1.id,
           symptoms: 'Parent reports mild skin rash and itching on forearms.',
           diagnosis: 'Mild pediatric contact dermatitis & seasonal allergy.',
           notes: 'Advised switching to hypoallergenic soap. Apply cream as directed.'
@@ -284,29 +327,10 @@ async function autoSeedDefaultUsers() {
         }
       });
 
-      // 9. Invoices for Mariam Gamal
-      const invMariam = await prisma.invoice.create({
-        data: {
-          patientId: patient1.id,
-          appointmentId: appt1.id,
-          status: 'PAID',
-          totalAmount: 700.00,
-          paidAmount: 700.00
-        }
-      });
-
-      await prisma.invoiceItem.createMany({
-        data: [
-          { invoiceId: invMariam.id, description: 'Specialist Cardiology Consultation', amount: 450.00 },
-          { invoiceId: invMariam.id, description: 'ECG Electrocardiogram Diagnostics', amount: 250.00 }
-        ]
-      });
-
-      // 10. Invoices for Shehab Eldin Ebied
       const invShehab = await prisma.invoice.create({
         data: {
           patientId: patient2.id,
-          appointmentId: apptShehab.id,
+          appointmentId: apptShehab1.id,
           status: 'PARTIALLY_PAID',
           totalAmount: 500.00,
           paidAmount: 200.00
@@ -321,7 +345,7 @@ async function autoSeedDefaultUsers() {
       });
     }
 
-    // 11. Pharmacy Inventory & Lab Tests
+    // 8. Pharmacy Inventory & Lab Tests
     const medCount = await prisma.medicineInventory.count();
     if (medCount === 0) {
       await prisma.medicineInventory.createMany({

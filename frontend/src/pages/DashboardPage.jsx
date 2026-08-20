@@ -92,7 +92,7 @@ function DashboardPage() {
           <div className="bg-card border border-border rounded-2xl shadow-premium p-4 sm:p-6 flex items-center justify-between gap-3 hover:shadow-premium-hover transition-all duration-300">
             <div className="space-y-1 sm:space-y-2 min-w-0 flex-1">
               <p className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-muted-foreground truncate" title="Upcoming Visits">Upcoming Visits</p>
-              <p className="text-2xl sm:text-3xl font-black">{appointments.filter(a => new Date(a.dateTime) >= new Date()).length}</p>
+              <p className="text-2xl sm:text-3xl font-black">{appointments.filter(a => a.status === 'SCHEDULED' || a.status === 'CONFIRMED' || new Date(a.dateTime) >= new Date()).length}</p>
             </div>
             <div className="p-2.5 sm:p-3.5 bg-blue-500/10 text-blue-500 rounded-xl sm:rounded-2xl shrink-0">
               <Calendar className="w-5 h-5 sm:w-6 sm:h-6" />
