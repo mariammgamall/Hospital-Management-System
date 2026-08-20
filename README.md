@@ -141,7 +141,7 @@ Double-click **`start.bat`** in the project root to automatically launch both th
 
 ## 🔐 Pre-seeded Accounts Checklist (8 Roles)
 
-All pre-seeded accounts share the password **`password123`**:
+All pre-seeded accounts share the password **`Password@123`**:
 
 | Name | Operational Role | Email Address | Core Permissions & Capabilities |
 | :--- | :--- | :--- | :--- |

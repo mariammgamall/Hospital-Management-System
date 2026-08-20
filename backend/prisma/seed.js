@@ -30,7 +30,7 @@ async function main() {
 
   // 2. Hash common password
   const salt = bcrypt.genSaltSync(10);
-  const commonPasswordHash = bcrypt.hashSync('password123', salt);
+  const commonPasswordHash = bcrypt.hashSync('Password@123', salt);
 
   // 3. Seed Departments
   console.log('Seeding Departments...');

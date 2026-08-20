@@ -6,7 +6,7 @@ async function autoSeedDefaultUsers() {
     console.log('Checking database seed state...');
 
     const salt = bcrypt.genSaltSync(10);
-    const commonPasswordHash = bcrypt.hashSync('password123', salt);
+    const commonPasswordHash = bcrypt.hashSync('Password@123', salt);
 
     // 1. Ensure Departments exist using upsert
     const cardiology = await prisma.department.upsert({
